@@ -6,11 +6,24 @@ using UnityEngine;
 public class PickableManager : MonoBehaviour
 {
     [SerializeField] private PlayerController _player;
+
+    [SerializeField] private ScoreManager _scoreManager;
     public List<Pickable> _pickables;
 
     private void Start()
     {
         InitPickableList();
+    }
+
+    private void OnDestroy()
+    {
+        Pickable[] pickableObjects = FindObjectsOfType<Pickable>();
+        
+        for (int i = 0; i < pickableObjects.Length; i++)
+        {
+            _pickables.Add(pickableObjects[i]);
+            pickableObjects[i].OnPicked -= OnPickablePicked;
+        }
     }
 
     private void InitPickableList()
@@ -22,14 +35,15 @@ public class PickableManager : MonoBehaviour
             _pickables.Add(pickableObjects[i]);
             pickableObjects[i].OnPicked += OnPickablePicked;
         }
+        _scoreManager.SetMaxScore(_pickables.Count);
         Debug.Log("Pickable List: "+_pickables.Count);
     }
     
     private void OnPickablePicked(Pickable pickable)
-
     {
-        _pickables.Remove(pickable);
         Destroy(pickable.gameObject);
+
+        _pickables.Remove(pickable);
         
         Debug.Log("Pickable List: " + _pickables.Count);
 
@@ -42,5 +56,8 @@ public class PickableManager : MonoBehaviour
         {
             _player?.PickPowerUp();
         }
+        _scoreManager.AddScore(1);
+        
+
     }
 }

@@ -8,10 +8,13 @@ namespace _PacMan.Scripts.AI_State
     {
         private bool _isMoving;
         private Vector3 _destination;
+        private static readonly int AnimatorState = Animator.StringToHash("Patrol State");
+
         
         public void EnterState(Enemy enemy)
         {
             Debug.Log("Start Patrol");
+            enemy.animator.SetTrigger(AnimatorState);
             _isMoving = false;
         }
 
@@ -22,14 +25,14 @@ namespace _PacMan.Scripts.AI_State
                 _isMoving = true;
                 Debug.Log("Moving to Patrol one of Waypoints");
 
-                int index = Random.Range(0, enemy._waypoints.Count);
-                _destination = enemy._waypoints[index].position;
+                int index = Random.Range(0, enemy.waypoints.Count);
+                _destination = enemy.waypoints[index].position;
 
-                enemy._navMeshAgent.destination = _destination;
+                enemy.navMeshAgent.destination = _destination;
             }
             else
             {
-                if (Vector3.Distance(enemy.Player.transform.position, enemy.transform.position) <= enemy._chaseDistance)
+                if (Vector3.Distance(enemy.player.transform.position, enemy.transform.position) <= enemy.chaseDistance)
                 {
                     Debug.Log("Player Detected, switch mode to chase");
                     enemy.SwitchState(enemy.ChaseState);

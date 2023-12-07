@@ -9,33 +9,50 @@ public class Enemy : MonoBehaviour
 {
     private BaseState _currentState;
     [SerializeField]
-    public float _chaseDistance;
+    public float chaseDistance;
     [SerializeField]
-    public PlayerController Player;
+    public PlayerController player;
+
+    [SerializeField] private GameObject listWaypoints;
+    
     [SerializeField]
-    public List<Transform> _waypoints = new List<Transform>();
+    public List<Transform> waypoints = new List<Transform>();
     
     public PatrolState PatrolState = new PatrolState();
     public ChaseState ChaseState = new ChaseState();
     public RetreatState RetreatState = new RetreatState();
     
     [HideInInspector]
-    public NavMeshAgent _navMeshAgent;
+    public NavMeshAgent navMeshAgent;
+
+    [HideInInspector] 
+    public Animator animator;
 
     private void Awake()
     {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        
         _currentState = PatrolState;
         _currentState.EnterState(this);
-
-        _navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
     {
-        if(Player != null)
+        if(player != null)
         {
-            Player.OnPowerUpStart += StartRetreating;
-            Player.OnPowerUpStop += StopRetreating;
+            player.OnPowerUpStart += StartRetreating;
+            player.OnPowerUpStop += StopRetreating;
+        }
+
+        InitWaypoints();
+    }
+
+    private void InitWaypoints()
+    {
+        foreach(Transform child in listWaypoints.transform)
+        {
+            waypoints.Add(child);
         }
     }
 
@@ -46,7 +63,18 @@ public class Enemy : MonoBehaviour
             _currentState.UpdateState(this);
         }
     }
-    
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(_currentState != RetreatState)
+        {
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                collision.gameObject.GetComponent<PlayerController>().Dead();
+            }
+        }
+    }
+
     private void StartRetreating()
     {
         SwitchState(RetreatState);
@@ -57,11 +85,17 @@ public class Enemy : MonoBehaviour
         SwitchState(PatrolState);
     }
     
+    
     public void SwitchState(BaseState state)
     {
         _currentState.ExitState(this);
         _currentState = state;
         _currentState.EnterState(this);
+    }
+    
+    public void Dead()
+    {
+        Destroy(gameObject);
     }
     
 }
