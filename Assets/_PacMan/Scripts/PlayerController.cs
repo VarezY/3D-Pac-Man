@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _respawnPoint;
     [SerializeField] private int _health;
     [SerializeField] private TMP_Text _heatlhText;
+    [SerializeField] private SceneController _sceneController;
     
     private Rigidbody _rigidbody;
     private Vector3 _movementDir;
@@ -72,6 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             _health = 0;
             Debug.Log("Lose");
+            _sceneController.LoseScene();
         }
         UpdateUI();
     }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class PickableManager : MonoBehaviour
 {
     [SerializeField] private PlayerController _player;
+    [SerializeField] private SceneController _sceneController;
 
     [SerializeField] private ScoreManager _scoreManager;
     public List<Pickable> _pickables;
@@ -50,6 +51,7 @@ public class PickableManager : MonoBehaviour
         if (_pickables.Count <= 0)
         {
             Debug.Log("Win");
+            _sceneController.WinScene();
         }
         
         if (pickable._PickableType == PickableType.PowerUp)

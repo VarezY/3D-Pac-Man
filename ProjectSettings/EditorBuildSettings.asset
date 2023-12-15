@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_PacMan/Scenes/Builds/MainMenu.unity
+    guid: eb89aa1a108e0e94cb2545d9e1b5afb9
+  - enabled: 1
+    path: Assets/_PacMan/Scenes/Builds/Area 1.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/_PacMan/Scenes/Builds/Win Scene.unity
+    guid: 18b343b74d4bdd0428aa041dc438b541
+  - enabled: 1
+    path: Assets/_PacMan/Scenes/Builds/Lose Scene.unity
+    guid: 764254f48ee4fa5499020d34633d4cbf
   m_configObjects: {}
